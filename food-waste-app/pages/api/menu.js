@@ -1,6 +1,7 @@
 // pages/api/menu.js
 export default async function handler(req, res) {
-    const apiUrl = 'https://amherst.api.nutrislice.com/menu/api/weeks/school/valentine-hall/menu-type/dinner/2025/03/29/';
+    const apiUrl = process.env.NEXT_PUBLIC_MENU_API_URL
+    console.log('API URL:', apiUrl);
 
     try {
         const response = await fetch(apiUrl,{
