@@ -7,12 +7,13 @@ import 'swiper/css/navigation';
 export default function Home() {
     const [menu, setMenu] = useState(null);
     const [error, setError] = useState(null);
+    const [selectedTab, setSelectedTab] = useState('Breakfast');
     const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
     useEffect(() => {
         async function fetchMenuData() {
             try {
-                const response = await fetch('/api/menu');
+                const response = await fetch(`/api/${selectedTab.toLowerCase()}-menu`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch menu');
                 }
@@ -23,12 +24,37 @@ export default function Home() {
             }
         }
         fetchMenuData();
-    }, []);
+    }, [selectedTab]);  
+
+    const handleTabClick = (tab) => {
+        setSelectedTab(tab);
+        setSelectedDayIndex(0); 
+    };
 
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-            <h1 style={{ textAlign: 'center' }}>Valentine Hall Dinner Menu</h1>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                {['Breakfast', 'Lunch', 'Dinner'].map((tab) => (
+                    <button
+                        key={tab}
+                        onClick={() => handleTabClick(tab)}
+                        style={{
+                            padding: '10px 20px',
+                            margin: '0 10px',
+                            border: '1px solid #ccc',
+                            borderRadius: '5px',
+                            backgroundColor: selectedTab === tab ? '#007bff' : '#f9f9f9',
+                            color: selectedTab === tab ? '#fff' : '#000',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        {tab}
+                    </button>
+                ))}
+            </div>
+
             {error && <p style={{ color: 'red', textAlign: 'center' }}>Error: {error}</p>}
+
             {menu ? (
                 <>
                     <Swiper 
@@ -45,10 +71,11 @@ export default function Home() {
                             </SwiperSlide>
                         ))}
                     </Swiper>
-                    <div style={{ 
-                        padding: '20px', 
-                        border: '1px solid #ddd', 
-                        borderRadius: '8px', 
+
+                    <div style={{
+                        padding: '20px',
+                        border: '1px solid #ddd',
+                        borderRadius: '8px',
                         backgroundColor: '#f9f9f9',
                         boxShadow: '0px 4px 6px rgba(0,0,0,0.1)',
                     }}>
