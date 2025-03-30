@@ -12,6 +12,7 @@ export default function Home() {
     const [availableFoodOptions, setAvailableFoodOptions] = useState([]); // Array to store all available food items
     const [selectedFoodOptions, setSelectedFoodOptions] = useState([]); // Array to store selected food items
     const [showSuggestion, setShowSuggestion] = useState(false); // To toggle the display of suggestion box
+    const [mealPlan, setMealPlan] = useState(""); // To store the meal plan string
 
     useEffect(() => {
         async function fetchMenuData() {
@@ -54,8 +55,29 @@ export default function Home() {
         });
     };
 
-    const handleSuggestMealClick = () => {
-        setShowSuggestion(true);
+    const handleSuggestMealClick = async () => {
+        try {
+            const response = await fetch('/api/getMealPlan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    availableFoodOptions,
+                    selectedFoodOptions,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch meal plan');
+            }
+
+            const data = await response.json();
+            setMealPlan(data.mealPlan); // Assuming the API returns { mealPlan: 'Meal plan string' }
+            setShowSuggestion(true); // Show the suggestion box after fetching the meal plan
+        } catch (error) {
+            setError(error.message);
+        }
     };
 
     return (
@@ -146,8 +168,8 @@ export default function Home() {
                         </button>
                     </div>
 
-                    {/* Display suggestion box with available and selected options */}
-                    {showSuggestion && (
+                    {/* Display the meal plan after fetching it */}
+                    {showSuggestion && mealPlan && (
                         <div style={{
                             marginTop: '20px',
                             padding: '20px',
@@ -156,15 +178,8 @@ export default function Home() {
                             boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
                             border: '1px solid #ddd',
                         }}>
-                            <h3 style={{ textAlign: 'center' }}>Suggested Meal</h3>
-                            <div style={{ marginBottom: '10px' }}>
-                                <strong>Available Food Options:</strong>
-                                <pre>{JSON.stringify(availableFoodOptions, null, 2)}</pre>
-                            </div>
-                            <div>
-                                <strong>Selected Food Options:</strong>
-                                <pre>{JSON.stringify(selectedFoodOptions, null, 2)}</pre>
-                            </div>
+                            <h3 style={{ textAlign: 'center' }}>Suggested Meal Plan</h3>
+                            <p style={{ textAlign: 'center', fontSize: '16px' }}>{mealPlan}</p>
                         </div>
                     )}
                 </>
