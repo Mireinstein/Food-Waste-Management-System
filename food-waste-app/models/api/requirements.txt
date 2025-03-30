@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+torch
+pillow
+transformers
+peft
+trl
+datasets
+bitsandbytes
