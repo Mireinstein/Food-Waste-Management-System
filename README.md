@@ -25,7 +25,7 @@ Research has shown that **conscious eaters in colleges waste less food**. Howeve
 
 ## 🏗️ Tech Stack
 
-- **Frontend:** React (Vite), Tailwind CSS
+- **Frontend:** React, CSS
 - **Backend:** Node.js, Next.js
 - **AI & Recommendations:** OpenAI API / Custom ML Model (for meal planning and sustainability suggestions)
 
