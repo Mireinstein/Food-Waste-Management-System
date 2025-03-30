@@ -12,10 +12,10 @@ NEXT_PUBLIC_MENU_API_URL="https://amherst.api.nutrislice.com/menu/api/weeks/scho
 
 ```
 
-Ask developers for api key and add it in .env file OPENAI_API_KEY
+Ask developers for api key and add it in .env file as OPENAI_API_KEY=provided_key
 
 Run the development server:
-
+```
 npm install
 npm run dev
-
+```
